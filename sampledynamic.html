@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Event Handling</title>
+</head>
+<body>
+
+<script>
+  // 1. 新しい要素を作成
+  for(var i=0;i<10;i++) {
+    var buttonElement = document.createElement('button');
+  
+  // 2. イベントハンドラを関連付けたいイベントを指定
+  var eventName = 'click';
+
+  // 3. イベントハンドラを定義
+  function handleClick() {
+    alert('ボタンがクリックされました！');
+    console.log("changed")
+  }
+
+  // 4. 作成した要素にイベントハンドラを追加
+  buttonElement.addEventListener(eventName, handleClick);
+
+  // ボタンにテキストを追加
+  buttonElement.appendChild(document.createTextNode('クリックしてください'));
+
+  // ボディにボタンを追加
+  document.body.appendChild(buttonElement);
+  }
+  
+</script>
+
+</body>
+</html>

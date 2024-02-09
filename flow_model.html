@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>出馬表</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input, select, textarea {
+      margin-bottom: 10px;
+      padding: 8px;
+      box-sizing: border-box;
+      width: 100%;
+    }
+
+    select, #rota {
+      width: 20%;
+      /*background-color: pink; /* ピンクの背景色 */
+    }
+
+    button {
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #result-container {
+      margin-top: 20px;
+    }
+
+    .record {
+      margin-bottom: 5px;
+      display: flex;
+    }
+
+    .record div {
+      margin-right: 10px;
+    }
+
+    /* 各脚質に対するスタイル */
+    /* option[value="逃げ"] { background-color: pink; }
+    option[value="先行"] { background-color: underline red; }
+    option[value="中団"] { background-color: underline green; }
+    option[value="差し"] { background-color: underline blue; }
+    option[value="後方"] { background-color: underline purple; } */
+  </style>
+</head>
+<body>
+  <input>
+  <label for="numberInput">頭数入力:</label>
+  <input type="number" id="numberInput" required>
+
+  <button onclick="displayRecords()">実行</button>
+
+  <div id="result-container"></div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+ 
+  <script>
+    var datasize = 0;
+    function displayRecords() {
+      var n = parseInt(document.getElementById('numberInput').value, 10);
+      datasize = n;
+      var resultContainer = document.getElementById('result-container');
+      resultContainer.innerHTML = '';
+      
+      for (var i = 1; i <= n; i++) {
+        var legStyleSelect = document.createElement('select');
+        legStyleSelect.id = `legStyleSelect_${i}`;
+        legStyleSelect.innerHTML = '<option value="逃げ" background-color="pink">逃げ</option>' +
+                                   '<option value="先行" background-color="red">先行</option>' +
+                                   '<option value="中団" background-color="green">中団</option>' +
+                                   '<option value="差し" background-color="blue">差し</option>' +
+                                   '<option value="後方" background-color="purple">後方</option>';
+        legStyleSelect.addEventListener('click', function(event) {
+          // 選択が変更されたときの処理
+          var selectedOption = event.target.options[event.target.selectedIndex];
+          var bgColor = getBackgroundColor(selectedOption.value);
+          console.log(selectedOption.value)
+          console.log(bgColor);
+          var recordDiv = document.getElementById(event.target.id); // 対応するrecordDivのIDを取得
+          console.log(event.target.id);
+          recordDiv.style.backgroundColor = bgColor; // 背景色を設定
+          console.log("changed")
+
+          // var legStyleSelect = document.getElementById(`recordDiv_${i}`);
+          // var selectedOption = legStyleSelect.options[legStyleSelect.selectedIndex];
+          // legStyleSelect.style.backgroundColor = getBackgroundColor(selectedOption.value);
+        });
+        
+        var rotationInput = document.createElement('input');
+        rotationInput.id = 'rota'
+        rotationInput.type = 'text';
+
+        var memoTextarea = document.createElement('textarea');
+        memoTextarea.rows = 4;
+
+        var recordDiv = document.createElement('div');
+        recordDiv.className = 'record';
+        recordDiv.innerHTML = `<div>${i} </div>`;
+        recordDiv.appendChild(legStyleSelect);
+        // recordDiv.innerHTML += `<div>|</div>`;
+        recordDiv.appendChild(rotationInput);
+        // recordDiv.innerHTML += `<div>|</div>`;
+        recordDiv.appendChild(memoTextarea);
+
+        resultContainer.appendChild(recordDiv);
+      }
+    }
+
+    function changeBackgroundColor() {
+      var legStyleSelect = document.getElementById('legStyleSelect');
+      var selectedOption = legStyleSelect.options[legStyleSelect.selectedIndex];
+
+      // 脚質に応じて背景色を変更
+      legStyleSelect.style.backgroundColor = getBackgroundColor(selectedOption.value);
+    }
+
+    function getBackgroundColor(legStyle) {
+      switch (legStyle) {
+        case '逃げ':
+          return 'pink';
+        case '先行':
+          return 'red';
+        case '中団':
+          return 'green';
+        case '差し':
+          return 'blue';
+        case '後方':
+          return 'purple';
+        default:
+          return 'white'; // デフォルトの背景色
+      }
+    }
+  </script>
+
+</body>
+</html>
